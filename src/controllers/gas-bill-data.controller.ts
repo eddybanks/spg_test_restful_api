@@ -1,6 +1,6 @@
 // Uncomment these imports to begin using these cool features!
 
-import {service} from '@loopback/core';
+import {service as lbservice} from '@loopback/core';
 import {Filter} from '@loopback/repository';
 import {get, getModelSchemaRef, param} from '@loopback/rest';
 import {GasConsumption} from '../models';
@@ -8,8 +8,8 @@ import {GasBillDataService} from '../services/gas-bill-data.service';
 
 export class GasBillDataController {
   constructor(
-    @service(GasBillDataService) public service: GasBillDataService,
-  ) { }
+    @lbservice(GasBillDataService) public service: GasBillDataService,
+  ) {}
 
   @get('/gas-bill-data', {
     responses: {
@@ -19,7 +19,9 @@ export class GasBillDataController {
           'application/json': {
             schema: {
               type: 'array',
-              items: getModelSchemaRef(GasConsumption, {includeRelations: true}),
+              items: getModelSchemaRef(GasConsumption, {
+                includeRelations: true,
+              }),
             },
           },
         },
@@ -29,7 +31,6 @@ export class GasBillDataController {
   async find(
     @param.filter(GasConsumption) filter?: Filter<GasConsumption>,
   ): Promise<GasConsumption[]> {
-
-    return await this.service.getAll(filter);
+    return this.service.getAll(filter);
   }
 }

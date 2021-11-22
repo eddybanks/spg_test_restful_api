@@ -1,4 +1,4 @@
-import {service} from '@loopback/core';
+import {service as lbservice} from '@loopback/core';
 import {Filter} from '@loopback/repository';
 import {get, getModelSchemaRef, param} from '@loopback/rest';
 import {ElectricityConsumption} from '../models';
@@ -6,8 +6,9 @@ import {ElectricityBillDataService} from '../services';
 
 export class ElectricityBillDataController {
   constructor(
-    @service(ElectricityBillDataService) public service: ElectricityBillDataService,
-  ) { }
+    @lbservice(ElectricityBillDataService)
+    public service: ElectricityBillDataService,
+  ) {}
 
   @get('/electricity-bill-data', {
     responses: {
@@ -17,7 +18,9 @@ export class ElectricityBillDataController {
           'application/json': {
             schema: {
               type: 'array',
-              items: getModelSchemaRef(ElectricityConsumption, {includeRelations: true}),
+              items: getModelSchemaRef(ElectricityConsumption, {
+                includeRelations: true,
+              }),
             },
           },
         },
@@ -25,9 +28,9 @@ export class ElectricityBillDataController {
     },
   })
   async find(
-    @param.filter(ElectricityConsumption) filter?: Filter<ElectricityConsumption>,
+    @param.filter(ElectricityConsumption)
+    filter?: Filter<ElectricityConsumption>,
   ): Promise<ElectricityConsumption[]> {
-
-    return await this.service.getAll(filter);
+    return this.service.getAll(filter);
   }
 }
